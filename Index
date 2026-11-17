@@ -49,6 +49,9 @@ button:focus-visible{outline:3px solid var(--lv);outline-offset:2px}
 .sp{position:absolute;font-style:normal;font-size:22px;pointer-events:none;animation:fl .9s forwards}
 @keyframes fl{to{transform:translateY(-60px) scale(1.4);opacity:0}}
 .tw{animation:tw 1.4s infinite}@keyframes tw{50%{opacity:.25}}
+#char svg,#pchar svg,.hero svg{animation:idle 3.4s ease-in-out infinite}@keyframes idle{50%{transform:translateY(-4px)}}
+.ey{transform-box:fill-box;transform-origin:center;animation:bl 4.2s infinite}@keyframes bl{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.card .cf{background:radial-gradient(circle at 50% 45%,#ffffffcc,transparent 70%)}
 #panel{flex:1 1 54%;overflow:auto;background:var(--pn);border-radius:24px 24px 0 0;padding:10px;box-shadow:0 -6px 18px #b79cff33}
 @media(min-width:820px){.main{flex-direction:row}#panel{flex:0 0 410px;border-radius:24px 0 0 24px;order:2}#stage{flex:1}}
 .tabs,.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
@@ -103,12 +106,12 @@ const CH=[
 {n:'Yuki',t:'Imut & kawaii ❄️',skin:'#ffe8dc',hs:'twin',hc:'#8fd0ff',er:10,hw:39,lens:'#3a8bd8',ex:'kiss'}];
 CH.push({n:'Rina',t:'Gaul & trendi 🎧',skin:'#f7cdb5',hs:'spacebuns',hc:'#e07a3a',er:9.5,hw:37,lens:'#3aa86b',ex:'wink',ea:5,hb:'wisp',w:{top:'tee',bottom:'pleat',jacket:'denim',shoes:'sneak'}},
 {n:'Hana',t:'Lembut & puitis 🌼',skin:'#ffe0d0',hs:'braid',hc:'#e8c07a',er:9,hw:38,lens:'#3a8bd8',ex:'smile',hb:'curtain',fk:1,ha:'flower',bl:'#ffa88a',w:{dress:'cdress',shoes:'flat'}},
-{n:'Zoe',t:'Berani & stylish ⚡',skin:'#a56b45',hs:'bob',hc:'#ff5c7a',er:9,hw:39,lens:'#e8b030',ex:'smile',ea:6,hb:'blunt',br:'arch|#222222',w:{top:'crop',bottom:'pants',shoes:'sneak'}});
-Object.assign(CH[0],{hb:'blunt',ha:'bow',bl:'#ff8fb1',w:{dress:'cdress',shoes:'flat'}});
-Object.assign(CH[1],{hs:'wavy',hb:'curtain',ea:6,br:'arch|#222222',w:{top:'shirt',bottom:'pleat',shoes:'heels'}});
+{n:'Zoe',bm:1,t:'Berani & stylish ⚡',skin:'#a56b45',hs:'bob',hc:'#ff5c7a',er:9,hw:39,lens:'#e8b030',ex:'smile',ea:6,hb:'blunt',br:'arch|#222222',w:{top:'crop',bottom:'pants',shoes:'sneak'}});
+Object.assign(CH[0],{er:10.5,hb:'blunt',ha:'bow',bl:'#ff8fb1',w:{dress:'cdress',shoes:'flat'}});
+Object.assign(CH[1],{bm:1,hs:'wavy',hb:'curtain',ea:6,br:'arch|#222222',w:{top:'shirt',bottom:'pleat',shoes:'heels'}});
 Object.assign(CH[2],{hb:'none',fk:1,w:{top:'crop',bottom:'shorts',shoes:'sneak'}});
 Object.assign(CH[3],{hb:'side',ha:'clip',w:{top:'knit',bottom:'pants',shoes:'flat'}});
-Object.assign(CH[4],{hb:'blunt',ha:'bow',bl:'#ff8fb1',w:{dress:'pina',shoes:'sneak'}});
+Object.assign(CH[4],{er:11,hb:'blunt',ha:'bow',bl:'#ff8fb1',w:{dress:'pina',shoes:'sneak'}});
 const newState=i=>({ch:i,skin:CH[i].skin,ex:CH[i].ex,mk:{blush:CH[i].bl||null,shadow:null,liner:null,mascara:'#222222',lip:null,brow:CH[i].br||'soft|#5a3a2a',lens:CH[i].lens,hl:null,glit:null,lash:'nat'},h:{s:CH[i].hs,c:CH[i].hc,a:CH[i].ha||null,ac:'#ff7fae',b:CH[i].hb||'side'},w:{...(CH[i].w||{top:'tee',bottom:'mini',shoes:'flat'})},col:{}});
 /* ---------- ITEMS ---------- */
 const P=(d,c,x='')=>`<path d="${d}" fill="${c}" ${x}/>`,M=s=>s+`<g transform="translate(200 0) scale(-1 1)">${s}</g>`;
@@ -184,26 +187,26 @@ function face(S,c){const k=S.mk,ex=S.ex,er=c.er,w=er*.88;let s='';
   if(k.shadow)s+=`<ellipse cx="${x}" cy="${y-er*.55}" rx="${er*1.3}" ry="${er*.72}" fill="${k.shadow}" opacity=".65"/>`;
   s+=`<path d="${bs=='arch'?`M${B(26)} 73Q${B(17)} 62 ${B(7)} 70`:bs=='str'?`M${B(26)} 70L${B(7)} 69`:`M${B(26)} 72Q${B(16)} 66 ${B(7)} 71`}" stroke="${bc}" stroke-width="3.2" stroke-linecap="round" fill="none"/>`;
   if(wk){s+=`<path d="M${x-9} ${y+1}Q${x} ${y-8} ${x+9} ${y+1}" stroke="#3a2a3a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;return}
-  s+=`<g transform="rotate(${-d*(c.ea||0)} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="${w}" ry="${er}" fill="#fff"/><circle cx="${x}" cy="${y+1}" r="${er*.72}" fill="${k.lens}" stroke="#0003" stroke-width=".8"/><circle cx="${x}" cy="${y+1.5}" r="${er*.38}" fill="#2a1a2a"/><circle cx="${x-2.5}" cy="${y-3}" r="2.4" fill="#fff"/><circle cx="${x+2.5}" cy="${y+3.5}" r="1.2" fill="#fff"/>`;
+  s+=`<g class="ey"><g transform="rotate(${-d*(c.ea||0)} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="${w}" ry="${er}" fill="#fff"/><circle cx="${x}" cy="${y+1}" r="${er*.72}" fill="${k.lens}" stroke="#0003" stroke-width=".8"/><path d="M${x-er*.72} ${y+1}A${er*.72} ${er*.72} 0 0 0 ${x+er*.72} ${y+1}Z" fill="#fff" opacity=".3"/><circle cx="${x}" cy="${y+1.5}" r="${er*.38}" fill="#2a1a2a"/><circle cx="${x-2.8}" cy="${y-3.2}" r="3" fill="#fff"/><circle cx="${x+2.5}" cy="${y+3.5}" r="1.2" fill="#fff"/>`;
   const arc=`M${x-d*w} ${y-1}Q${x} ${y-er*1.25} ${x+d*w} ${y-1}`;
-  s+=`<path d="${arc}" stroke="#3a2a3a" stroke-width="1.8" fill="none"/>`;
+  s+=`<path d="${arc}" stroke="#3a2a3a" stroke-width="2" fill="none"/><path d="M${x-d*w*.7} ${y-er*1.05}Q${x} ${y-er*1.6} ${x+d*w*.8} ${y-er*1.05}" stroke="#3a2a3a" stroke-width=".8" fill="none" opacity=".35"/>`;
   if(k.liner){const [ls,lc]=k.liner.split('|');s+=`<path d="${arc}${ls=='wing'?`L${x+d*(w+7)} ${y-er*.9}`:''}" stroke="${lc}" stroke-width="${ls=='thick'?3.4:2.2}" fill="none" stroke-linecap="round"/>`}
   if(k.lash!='none'){const f=k.lash=='dram'?1.7:1,L=[[x+d*w,y-2,d*3,-3.5],[x+d*w*.55,y-er*.55-1,d*1.5,-4],[x,y-er*.62-1,0,-4]];if(k.lash=='dram')L.push([x-d*w*.5,y-er*.55,-d*1.5,-4]);if(k.lash=='cute')L.push([x-d*3,y+er-1,0,3],[x+d*3,y+er-1,d*1.5,3]);
-   s+=L.map(l=>`<path d="M${l[0]} ${l[1]}l${l[2]*f} ${l[3]*f}" stroke="${k.mascara}" stroke-width="${k.lash=='dram'?1.9:1.5}" stroke-linecap="round"/>`).join('')}s+='</g>'});
- if(c.fk)s+=[[78,102],[83,105],[74,106],[122,102],[117,105],[126,106]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="1" fill="#b8704f" opacity=".6"/>`).join('');s+='<path d="M98 103Q100 105 102 103" stroke="#c98a7a" stroke-width="1.4" fill="none" opacity=".7"/>';
+   s+=L.map(l=>`<path d="M${l[0]} ${l[1]}l${l[2]*f} ${l[3]*f}" stroke="${k.mascara}" stroke-width="${k.lash=='dram'?1.9:1.5}" stroke-linecap="round"/>`).join('')}s+='</g></g>'});
+ if(c.bm)s+='<circle cx="113" cy="117" r="1.3" fill="#5a3a2a"/>';if(c.fk)s+=[[78,102],[83,105],[74,106],[122,102],[117,105],[126,106]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="1" fill="#b8704f" opacity=".6"/>`).join('');s+='<path d="M98 103Q100 105 102 103" stroke="#c98a7a" stroke-width="1.4" fill="none" opacity=".7"/>';
  const lp=k.lip||'#f4a0ad';
  s+=ex=='kiss'?`<ellipse cx="100" cy="115" rx="4.5" ry="3.6" fill="${lp}"/>`:ex=='wow'?`<ellipse cx="100" cy="116" rx="4.5" ry="5.5" fill="${lp}"/><ellipse cx="100" cy="117" rx="2.4" ry="3.4" fill="#7a2a3a"/>`:`<path d="M90 112Q100 126 110 112Q100 116 90 112Z" fill="${lp}"/><path d="M95 116Q100 120 105 116" stroke="#fff6" fill="none"/>`;
  if(k.glit)s+=GL.map((p,i)=>`<circle class="tw" style="animation-delay:${i*.15}s" cx="${p[0]}" cy="${p[1]}" r="1.4" fill="${k.glit}"/>`).join('');
  return s}
 function fig(S,vb){const c=CH[S.ch],w=S.w,h=S.h,sk=S.skin,hj=w.hijab,cl=id=>S.col[id]||I[id].c;
  const n=sl=>w[sl]?`<g stroke="rgba(0,0,0,.14)">${I[w[sl]].d(cl(w[sl]))}</g>`:'';
- let s=`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">`;
- if(!hj)s+=HB[h.s](h.c);
- s+=`<g fill="${sk}"><path d="M72 138Q100 130 128 138L124 190Q128 205 126 218H74Q72 205 76 190Z"/><rect x="92" y="116" width="16" height="28"/><circle cx="57" cy="208" r="5.5"/><circle cx="143" cy="208" r="5.5"/></g><path d="M73 144L58 205M127 144L142 205" stroke="${sk}" stroke-width="9" stroke-linecap="round" fill="none"/><path d="M89 214V322M111 214V322" stroke="${sk}" stroke-width="13"/><ellipse cx="100" cy="125" rx="14" ry="5" fill="#0001"/>`;
+ let s=`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="338" rx="48" ry="6" fill="#000" opacity=".1"/>`;
+ if(!hj)s+=HB[h.s](h.c)+(['straight','wavy','halfup','curly'].includes(h.s)?'<path d="M60 100Q56 150 64 205M140 100Q144 150 136 205" stroke="#000" stroke-opacity=".12" stroke-width="3" fill="none"/>':'');
+ s+=`<g fill="${sk}"><path d="M72 138Q100 130 128 138L124 190Q128 205 126 218H74Q72 205 76 190Z"/><rect x="92" y="116" width="16" height="28"/><circle cx="57" cy="208" r="5.5"/><circle cx="143" cy="208" r="5.5"/></g><path d="M73 144L58 205M127 144L142 205" stroke="${sk}" stroke-width="9" stroke-linecap="round" fill="none"/><path d="M89 214V322M111 214V322" stroke="${sk}" stroke-width="13"/><ellipse cx="100" cy="125" rx="14" ry="5" fill="#0001"/><path d="M87 143Q100 149 113 143" stroke="#0000001f" fill="none"/><path d="M100 222V320" stroke="#0000000f" stroke-width="2"/>`;
  if(!w.dress&&!w.top)s+='<path d="M76 150Q100 144 124 150L122 166Q100 172 78 166Z" fill="#fff"/>';
  if(!w.dress&&!w.bottom)s+='<path d="M77 205H123L120 226H80Z" fill="#fff"/>';
  s+=n('bottom')+n('top')+n('dress')+n('shoes')+n('jacket')+n('neck');
- s+=`<g fill="${sk}"><circle cx="${100-c.hw}" cy="90" r="5.5"/><circle cx="${100+c.hw}" cy="90" r="5.5"/><ellipse cx="100" cy="86" rx="${c.hw}" ry="40"/></g>`+face(S,c);
+ s+=`<g fill="${sk}"><circle cx="${100-c.hw}" cy="90" r="5.5"/><circle cx="${100+c.hw}" cy="90" r="5.5"/><path d="M${100-c.hw} 86C${100-c.hw} 58 ${100-c.hw*.5} 46 100 46C${100+c.hw*.5} 46 ${100+c.hw} 58 ${100+c.hw} 86C${100+c.hw} 112 ${100+c.hw*.45} 128 100 128C${100-c.hw*.45} 128 ${100-c.hw} 112 ${100-c.hw} 86Z"/></g><ellipse cx="100" cy="121" rx="${c.hw*.5}" ry="4" fill="#000" opacity=".05"/>`+face(S,c);
  if(!hj)s+=HF(h.c,h.s,h.b);else s+=I[hj].d(cl(hj));
  if(h.a)s+=HA[h.a](h.ac);
  s+=n('ear')+n('wrist')+n('bag');
